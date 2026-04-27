@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import prisma from "../lib/prisma";
 import ListUsers from "./listUsers";
 import { Skeleton } from "@/components/ui/skeleton";
+import MainPage from "./mainPage";
 
 async function UsersListContent() {
     const users = await prisma.user.findMany({
@@ -12,7 +13,7 @@ async function UsersListContent() {
 
 function UsersListFallback() {
     return (
-        <div className="flex flex-col p-4 space-y-4">
+        <div className="flex flex-col p-4 space-y-4 w-full md:w-[320px] lg:w-[380px] xl:w-[420px] 2xl:w-[480px] border-r h-screen">
             <Skeleton className="h-10 w-full rounded-md" />
             {[1, 2, 3, 4, 5, 6].map(i => (
                 <div key={i} className="flex items-center gap-3">
@@ -23,7 +24,6 @@ function UsersListFallback() {
         </div>
     );
 }
-
 export default function Layout({
     children,
 }: Readonly<{
@@ -31,14 +31,10 @@ export default function Layout({
 }>) {
     return (
         <div className="flex flex-row w-full h-full overflow-hidden bg-background">
-            <div className="hidden md:block md:w-[320px] lg:w-[380px] xl:w-[420px] 2xl:w-[480px] h-screen border-r shrink-0 overflow-hidden">
-                <Suspense fallback={<UsersListFallback />}>
-                    <UsersListContent />
-                </Suspense>
-            </div>
-            <div className="flex-1 h-screen overflow-hidden relative">
-                {children}
-            </div>
+            <Suspense fallback={<UsersListFallback />}>
+                <UsersListContent />
+            </Suspense>
+            <MainPage>{children}</MainPage>
         </div>
     );
 }
