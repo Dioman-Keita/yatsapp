@@ -14,18 +14,18 @@ export default function Profile() {
     const [loading, SetLoding] = useState<boolean>(false);
     const router = useRouter();
     async function logOut() {
-        await authClient.signOut({
-            fetchOptions: {
-                onSuccess: () => {
-                    router.push("/login");
-                    window.location.reload();
-                },
-                onRequest: () => {
-                    SetLoding(true);
-                },
-            },
-        });
-        router.replace("/chat");
+        try {
+            SetLoding(true);
+
+            await authClient.signOut();
+
+            router.replace("/login");
+            router.refresh();
+        } catch (error) {
+            console.error(error);
+        } finally {
+            SetLoding(false);
+        }
     }
     return (
         <div className="min-h-screen bg-muted/30">

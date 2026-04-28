@@ -3,8 +3,19 @@ import prisma from "../lib/prisma";
 import ListUsers from "./listUsers";
 import { Skeleton } from "@/components/ui/skeleton";
 import MainPage from "./mainPage";
+import { auth } from "../lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 async function UsersListContent() {
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+
+    if (!session) {
+        redirect("/login");
+    }
+
     const users = await prisma.user.findMany({
         take: 50,
     });
