@@ -9,7 +9,9 @@ import Link from "next/link";
 import { AvatarWithBadge } from "@/app/chat/components/avatarWithBadge";
 import { usePathname } from "next/navigation";
 import { profileNameAb } from "@/functions/string_function";
+import { useUser } from "@/app/store/user.store";
 import { cn } from "@/lib/utils";
+import { useEffect } from "react";
 
 interface userType {
     id: string;
@@ -25,6 +27,15 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 }
 
 export function AppSidebar({ user, ...props }: AppSidebarProps) {
+    const setUserName = useUser(state => state.setUserName);
+    const setUserEmail = useUser(state => state.setUserEmail);
+    const setUserId = useUser(state => state.setUserId);
+
+    useEffect(() => {
+        setUserId(user?.id);
+        setUserEmail(user?.email);
+        setUserName(user?.name);
+    }, [user]);
     return (
         <Sidebar collapsible="icon" className="border-r bg-sidebar/50" {...props}>
             <SidebarHeader className="flex items-center justify-center h-16 border-b shrink-0">
@@ -64,12 +75,14 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
                         </SideBarIcon>
                     ) : (
                         <SideBarIcon routeName="profile">
-                            <AvatarWithBadge 
-                                CN={profileNameAb(user.name)} 
-                                image={user.image as string} 
-                                className="size-6 shrink-0" 
+                            <AvatarWithBadge
+                                CN={profileNameAb(user.name)}
+                                image={user.image as string}
+                                className="size-6 shrink-0"
                             />
-                            <span className="group-data-[collapsible=icon]:hidden font-medium truncate ml-1">{user.name}</span>
+                            <span className="group-data-[collapsible=icon]:hidden font-medium truncate ml-1">
+                                {user.name}
+                            </span>
                         </SideBarIcon>
                     )}
                 </div>
@@ -95,12 +108,11 @@ export function SideBarIcon({
             href={`/${routeName}`}
             className={cn(
                 "flex items-center gap-4 p-3 rounded-xl transition-all duration-200 group-data-[collapsible=icon]:justify-center",
-                isActive 
-                    ? "bg-primary text-primary-foreground shadow-md" 
+                isActive
+                    ? "bg-primary text-primary-foreground shadow-md"
                     : "hover:bg-secondary/80 text-muted-foreground hover:text-foreground",
                 className
-            )}
-        >
+            )}>
             {children}
         </Link>
     );

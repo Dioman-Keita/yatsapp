@@ -18,7 +18,6 @@ async function NavContent({ children }: { children: React.ReactNode }) {
             <SidebarInset className="pb-16 md:pb-0 overflow-hidden flex flex-col min-w-0 w-full">
                 {children}
             </SidebarInset>
-
         </>
     );
 }
@@ -42,7 +41,6 @@ function NavFallback({ children }: { children: React.ReactNode }) {
             <SidebarInset className="pb-16 md:pb-0 overflow-hidden flex flex-col min-w-0 w-full">
                 {children}
             </SidebarInset>
-
         </>
     );
 }

@@ -9,6 +9,7 @@ import Option from "./components/option";
 import { authClient } from "../lib/auth_client";
 import { useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
+import { useUser } from "../store/user.store";
 
 export default function Profile() {
     const [loading, SetLoding] = useState<boolean>(false);
@@ -27,6 +28,7 @@ export default function Profile() {
             SetLoding(false);
         }
     }
+    const { userID, userName, userEmail } = useUser();
     return (
         <div className="min-h-screen bg-muted/30">
             <div className="flex items-center gap-4 px-4 py-4 bg-background shadow-sm">
@@ -44,7 +46,7 @@ export default function Profile() {
                     </Avatar>
 
                     <div>
-                        <h2 className="text-xl font-semibold">Ibrahima Sidibé</h2>
+                        <h2 className="text-xl font-semibold">{userName}</h2>
                         <p className="text-sm text-muted-foreground">Toujours coder, jamais abandonner 🚀 </p>
                     </div>
 
