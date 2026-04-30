@@ -1,0 +1,33 @@
+model FriendRequest {
+    id         String              @id @default(cuid())
+    senderId   String
+    receiverId String
+    status     FriendRequestStatus @default(PENDING)
+
+    sender   User @relation("sentRequests", fields: [senderId], references: [id], onDelete: Cascade)
+    receiver User @relation("receivedRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([senderId, receiverId])
+    @@index([senderId])
+    @@index([receiverId])
+    @@map("friend_request")
+}
+
+model Friend {
+    id      String @id @default(cuid())
+    user1Id String
+    user2Id String
+
+    user1 User @relation("friend1", fields: [user1Id], references: [id], onDelete: Cascade)
+    user2 User @relation("friend2", fields: [user2Id], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+
+    @@unique([user1Id, user2Id])
+    @@index([user1Id])
+    @@index([user2Id])
+    @@map("friend")
+}
