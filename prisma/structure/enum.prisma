@@ -1,5 +1,0 @@
-enum FriendRequestStatus {
-    PENDING
-    ACCEPTED
-    REJECTED
-}
