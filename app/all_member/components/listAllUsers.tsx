@@ -1,6 +1,6 @@
 "use client";
 import { profileNameAb } from "@/functions/string_function";
-import { AvatarWithBadge } from "../chat/components/avatarWithBadge";
+import { AvatarWithBadge } from "../../chat/components/avatarWithBadge";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,7 @@ import { userInterface } from "@/interface_and_type/user";
 import { useState, useMemo } from "react";
 import { AddFriendDialog } from "./addFriendDialog";
 
-export default function ListAllUsers({ users }: { users: userInterface[] }) {
+export default function ListAllUsers({ users, myID }: { users: userInterface[]; myID: string }) {
     const [search, setSearch] = useState<string>("");
 
     const filteredUsers = useMemo(() => {
@@ -22,15 +22,13 @@ export default function ListAllUsers({ users }: { users: userInterface[] }) {
                 <div className="relative flex items-center gap-2">
                     <div className="relative flex-1">
                         <Input
-                            placeholder="Rechercher un utilisateur..."
+                            placeholder="Rechercher un ami..."
                             value={search}
                             onChange={e => setSearch(e.target.value)}
-                            className="bg-secondary/50"
+                            className="pl-9 h-10"
                         />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     </div>
-                    <Button variant="secondary" size="icon">
-                        <Search className="h-4 w-4" />
-                    </Button>
                 </div>
             </div>
 
@@ -51,6 +49,7 @@ export default function ListAllUsers({ users }: { users: userInterface[] }) {
                                 email={user.email as string}
                                 name={user.name as string}
                                 image={user.image as string}
+                                myID={myID}
                             />
                         </div>
                     ))

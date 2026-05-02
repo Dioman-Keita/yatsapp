@@ -1,5 +1,5 @@
 import prisma from "@/app/lib/prisma";
-import ListAllUsers from "../listAllUsers";
+import ListAllUsers from "./listAllUsers";
 
 export default async function AllUsersContent({ userIdContraint }: { userIdContraint: string | undefined }) {
     const users = await prisma.user.findMany({
@@ -10,5 +10,5 @@ export default async function AllUsersContent({ userIdContraint }: { userIdContr
         },
         orderBy: { name: "asc" },
     });
-    return <ListAllUsers users={users} />;
+    return <ListAllUsers users={users} myID={userIdContraint || ""} />;
 }
