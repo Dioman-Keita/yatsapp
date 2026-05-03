@@ -1,5 +1,6 @@
 "use server";
-import prisma from "../lib/prisma";
+import { revalidatePath } from "next/cache";
+import prisma from "../../lib/prisma";
 
 export async function addFriendAction(myID: string, id: string) {
     try {
@@ -10,6 +11,7 @@ export async function addFriendAction(myID: string, id: string) {
                 status: "PENDING",
             },
         });
+        revalidatePath("/all_member");
     } catch (error) {
         console.error(error);
     }

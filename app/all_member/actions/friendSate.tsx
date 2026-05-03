@@ -1,6 +1,7 @@
 "use server";
 
-import prisma from "../lib/prisma";
+import { revalidatePath } from "next/cache";
+import prisma from "../../lib/prisma";
 
 export async function friendState(myID: string, id: string) {
     try {
@@ -16,6 +17,7 @@ export async function friendState(myID: string, id: string) {
             },
         });
         if (!state) throw new Error("impossibele de recupperer");
+        revalidatePath("/all_member");
         return state.status;
     } catch (error) {
         console.error(error);

@@ -9,9 +9,10 @@ import {
     DialogTrigger,
 } from "../../../components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { addFriendAction } from "../addFriendAction";
-import { friendState } from "../friendSate";
+import { addFriendAction } from "../actions/addFriendAction";
+import { friendState } from "../actions/friendSate";
 import { useEffect, useState } from "react";
+import { cencelFriend } from "../actions/cancekFirend";
 
 export function AddFriendDialog({
     id,
@@ -28,13 +29,16 @@ export function AddFriendDialog({
 }) {
     const [state, setState] = useState<"PENDING" | "ACCEPTED" | "REJECTED" | string>("");
     useEffect(() => {
-        const data = friendState(myID, id);
-        data.then(c => {
-            const etat = c as string;
-            return setState(etat);
-        });
-    }, []);
-    console.log(state);
+        async function fetchState() {
+            const data = await friendState(myID, id);
+            if (data) {
+                setState(data);
+            }
+        }
+
+        fetchState();
+    }, [myID, id]);
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -56,9 +60,19 @@ export function AddFriendDialog({
                         <AvatarImage src={`${image}`} />
                         <AvatarFallback>IS</AvatarFallback>
                     </Avatar>
-                    <Button className="ml-auto my-auto" onClick={() => addFriendAction(myID, id)}>
-                        add{" "}
-                    </Button>
+                    {state === "PENDING" ? (
+                        <Button className="ml-auto my-auto" onClick={() => cencelFriend(myID, id)}>
+                            CANCEL{" "}
+                        </Button>
+                    ) : state === "ACCEPTED" ? (
+                        <Button className="ml-auto my-auto" onClick={() => addFriendAction(myID, id)}>
+                            DEL{" "}
+                        </Button>
+                    ) : (
+                        <Button className="ml-auto my-auto" onClick={() => addFriendAction(myID, id)}>
+                            add{" "}
+                        </Button>
+                    )}
                 </div>
             </DialogContent>
         </Dialog>
