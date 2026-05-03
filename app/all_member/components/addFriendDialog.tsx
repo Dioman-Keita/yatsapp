@@ -13,6 +13,8 @@ import { addFriendAction } from "../actions/addFriendAction";
 import { friendState } from "../actions/friendSate";
 import { useEffect, useState } from "react";
 import { cencelFriend } from "../actions/cancekFirend";
+import { Router } from "next/router";
+import { useRouter } from "next/navigation";
 
 export function AddFriendDialog({
     id,
@@ -28,11 +30,13 @@ export function AddFriendDialog({
     myID: string;
 }) {
     const [state, setState] = useState<"PENDING" | "ACCEPTED" | "REJECTED" | string>("");
+    const router = useRouter();
     useEffect(() => {
         async function fetchState() {
             const data = await friendState(myID, id);
             if (data) {
                 setState(data);
+                router.refresh();
             }
         }
 
@@ -61,15 +65,21 @@ export function AddFriendDialog({
                         <AvatarFallback>IS</AvatarFallback>
                     </Avatar>
                     {state === "PENDING" ? (
-                        <Button className="ml-auto my-auto" onClick={() => cencelFriend(myID, id)}>
+                        <Button
+                            className="ml-auto my-auto transition-all duration-150 ease-in-out hover:scale-105 active:scale-95 "
+                            onClick={() => cencelFriend(myID, id)}>
                             CANCEL{" "}
                         </Button>
                     ) : state === "ACCEPTED" ? (
-                        <Button className="ml-auto my-auto" onClick={() => addFriendAction(myID, id)}>
+                        <Button
+                            className="ml-auto my-auto transition-all duration-150 ease-in-out hover:scale-105 active:scale-95 "
+                            onClick={() => addFriendAction(myID, id)}>
                             DEL{" "}
                         </Button>
                     ) : (
-                        <Button className="ml-auto my-auto" onClick={() => addFriendAction(myID, id)}>
+                        <Button
+                            className="ml-auto my-auto transition-all duration-150 ease-in-out hover:scale-105 active:scale-95 "
+                            onClick={() => addFriendAction(myID, id)}>
                             add{" "}
                         </Button>
                     )}
