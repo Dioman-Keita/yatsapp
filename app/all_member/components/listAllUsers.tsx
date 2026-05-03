@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { userInterface } from "@/interface_and_type/user";
 import { useState, useMemo } from "react";
 import { AddFriendDialog } from "./addFriendDialog";
+import { NotificationDialog } from "./notificationDialog";
 
 export default function ListAllUsers({ users, myID }: { users: userInterface[]; myID: string }) {
     const [search, setSearch] = useState<string>("");
@@ -18,7 +19,10 @@ export default function ListAllUsers({ users, myID }: { users: userInterface[]; 
     return (
         <div className="h-full flex flex-col bg-background">
             <div className="p-4 border-b">
-                <h1 className="text-xl font-bold mb-4">Liste de tes amis</h1>
+                <div className="flex items-center justify-between mb-4">
+                    <h1 className="text-xl font-bold">Liste de tes amis</h1>
+                    <NotificationDialog />
+                </div>
                 <div className="relative flex items-center gap-2">
                     <div className="relative flex-1">
                         <Input
