@@ -6,10 +6,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowLeft, Users, Settings, Lock, Edit, ImageIcon, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Option from "./components/option";
-import { authClient } from "../lib/auth_client";
+import { authClient } from "@/app/lib/auth_client";
 import { useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
-import { useUser } from "../store/user.store";
+import { useUser } from "@/app/store/user.store";
 
 export default function Profile() {
     const [loading, SetLoding] = useState<boolean>(false);

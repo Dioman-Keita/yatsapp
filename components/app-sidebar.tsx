@@ -6,12 +6,13 @@ import { MdChat, MdOutlineVideoCameraBack } from "react-icons/md";
 import { RiGroupLine } from "react-icons/ri";
 import { PhoneCall, User2Icon, UsersIcon } from "lucide-react";
 import Link from "next/link";
-import { AvatarWithBadge } from "@/app/chat/components/avatarWithBadge";
 import { usePathname } from "next/navigation";
 import { profileNameAb } from "@/functions/string_function";
 import { useUser } from "@/app/store/user.store";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
+import { useSession } from "@/app/lib/auth_client";
+import { AvatarWithBadge } from "@/app/(main)/chat/components/avatarWithBadge";
 
 interface userType {
     id: string;
@@ -26,16 +27,21 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
     user?: userType | undefined | null;
 }
 
-export function AppSidebar({ user, ...props }: AppSidebarProps) {
+export function AppSidebar({ user: initialUser, ...props }: AppSidebarProps) {
+    const { data: session } = useSession();
+    const user = initialUser || session?.user;
+
     const setUserName = useUser(state => state.setUserName);
     const setUserEmail = useUser(state => state.setUserEmail);
     const setUserId = useUser(state => state.setUserId);
 
     useEffect(() => {
-        setUserId(user?.id);
-        setUserEmail(user?.email);
-        setUserName(user?.name);
-    }, [user]);
+        if (user) {
+            setUserId(user.id);
+            setUserEmail(user.email);
+            setUserName(user.name);
+        }
+    }, [user, setUserId, setUserEmail, setUserName]);
     return (
         <Sidebar collapsible="icon" className="border-r bg-sidebar/50" {...props}>
             <SidebarHeader className="flex items-center justify-center h-16 border-b shrink-0">

@@ -1,6 +1,6 @@
 "use client";
 import { profileNameAb } from "@/functions/string_function";
-import { AvatarWithBadge } from "../../chat/components/avatarWithBadge";
+import { AvatarWithBadge } from "@/app/(main)/chat/components/avatarWithBadge";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";

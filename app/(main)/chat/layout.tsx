@@ -1,9 +1,9 @@
 import { Suspense } from "react";
-import prisma from "../lib/prisma";
+import prisma from "@/app/lib/prisma";
 import ListUsers from "./listUsers";
 import { Skeleton } from "@/components/ui/skeleton";
 import MainPage from "./mainPage";
-import { auth } from "../lib/auth";
+import { auth } from "@/app/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 

@@ -1,9 +1,9 @@
 import { MoreVertical, PhoneCall, VideoIcon } from "lucide-react";
 
 import BackButton from "@/components/ui/backButton";
-import UserIcon from "../components/userIcon";
-import ChatText from "../components/chatText";
-import { ChatButton } from "../components/chatIButton";
+import UserIcon from "@/app/(main)/chat/components/userIcon";
+import ChatText from "@/app/(main)/chat/components/chatText";
+import { ChatButton } from "@/app/(main)/chat/components/chatIButton";
 
 export default async function Page() {
     return (

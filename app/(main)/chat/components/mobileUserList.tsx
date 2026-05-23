@@ -2,7 +2,7 @@
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { UsersIcon } from "lucide-react";
-import ListUsers from "../listUsers";
+import ListUsers from "@/app/(main)/chat/listUsers";
 import { userInterface } from "@/interface_and_type/user";
 
 export function MobileUserList({ users }: { users: userInterface[] }) {

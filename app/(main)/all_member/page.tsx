@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import AllUsersLoading from "./components/allUsersLoading";
 import AllUsersContent from "./components/allUsersContent";
-import { auth } from "../lib/auth";
+import { auth } from "@/app/lib/auth";
 import { headers } from "next/headers";
 
 export default async function ListUsersPage() {
