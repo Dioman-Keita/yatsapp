@@ -9,8 +9,33 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+import GetNotification from "../actions/getNotification";
+import { useEffect, useState } from "react";
 
-export function NotificationDialog() {
+export interface notif {
+    id: string;
+    senderId: string;
+    receiverId: string;
+    status: FriendRequestStatus;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export function NotificationDialog({ userID }: { userID: string }) {
+    const [notif, setNotif] = useState<notif[]>([]);
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                const result = await GetNotification(userID);
+                if (!result) throw new Error("nous avons pas pu recuperer les notifs");
+                setNotif(result);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchNotifications();
+    }, [userID]);
+
     return (
         <Dialog>
             <DialogTrigger asChild>
