@@ -27,10 +27,8 @@ export function BottomNav({ user: initialUser }: { user?: userType | null }) {
 
     const navItems = [
         { href: "/chat", icon: MdChat, label: "Chat" },
-        { href: "/stories", icon: MdOutlineVideoCameraBack, label: "Stories" },
+
         { href: "/all_member", icon: RiGroupLine, label: "Membres" },
-        { href: "/groupe", icon: RiGroupLine, label: "Groupes" },
-        { href: "/call", icon: PhoneCall, label: "Appels" },
     ];
 
     return (
