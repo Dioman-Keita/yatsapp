@@ -1,5 +1,6 @@
 "use server";
 
+
 import prisma from "@/app/lib/prisma";
 
 /**
@@ -12,14 +13,17 @@ export async function friendState(myID: string, targetID: string) {
         const state = await prisma.friendRequest.findFirst({
             where: {
                 OR: [
+
                     { receiverId: targetID, senderId: myID },
                     { receiverId: myID, senderId: targetID },
+
                 ],
             },
             select: {
                 status: true,
             },
         });
+
 
         // Si aucune demande n'est trouvée, on vérifie si ils sont déjà amis
         if (!state) {
@@ -40,5 +44,6 @@ export async function friendState(myID: string, targetID: string) {
     } catch (error) {
         console.error("Erreur friendState:", error);
         return null;
+
     }
 }

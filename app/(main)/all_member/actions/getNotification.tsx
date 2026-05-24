@@ -3,6 +3,7 @@
 import prisma from "@/app/lib/prisma";
 
 export default async function GetNotification(id: string) {
+
     if (!id) return [];
 
     try {
@@ -28,6 +29,7 @@ export default async function GetNotification(id: string) {
         return notifications;
     } catch (error) {
         console.error("Erreur GetNotification:", error);
+
         return [];
     }
 }

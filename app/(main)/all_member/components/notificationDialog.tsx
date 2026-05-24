@@ -9,12 +9,14 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import GetNotification from "../actions/getNotification";
 import { useEffect, useState } from "react";
 import { reject, valider } from "../actions/actionFriend";
 
 type FriendRequestStatus = "PENDING" | "ACCEPTED" | "REJECTED";
+
 
 export interface notif {
     id: string;
@@ -23,6 +25,7 @@ export interface notif {
     status: FriendRequestStatus;
     createdAt: Date;
     updatedAt: Date;
+
     sender: {
         id: string;
         name: string;
@@ -38,12 +41,15 @@ export interface notif {
 export function NotificationDialog({ userID }: { userID: string }) {
     const [notifications, setNotifications] = useState<notif[]>([]);
 
+
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
                 const result = await GetNotification(userID);
                 if (!result) throw new Error("nous avons pas pu recuperer les notifs");
+
                 setNotifications(result);
+
             } catch (error) {
                 console.error(error);
             }
