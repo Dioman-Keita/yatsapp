@@ -3,18 +3,33 @@
 import prisma from "@/app/lib/prisma";
 
 export default async function GetNotification(id: string) {
+
+    if (!id) return [];
+
     try {
-        const notif = await prisma.friendRequest.findMany({
+        const notifications = await prisma.friendRequest.findMany({
             where: {
-                NOT: {
-                    id: id,
+                receiverId: id,
+                status: "PENDING",
+            },
+            include: {
+                sender: {
+                    select: {
+                        id: true,
+                        name: true,
+                        image: true,
+                    },
                 },
             },
+            orderBy: {
+                createdAt: 'desc'
+            }
         });
-        if (!notif) throw new Error("ne n'avons pas pu recuperer les notif");
-        return notif;
+        
+        return notifications;
     } catch (error) {
-        console.log(error);
+        console.error("Erreur GetNotification:", error);
+
         return [];
     }
 }

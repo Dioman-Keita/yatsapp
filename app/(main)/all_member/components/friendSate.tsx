@@ -1,25 +1,49 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+
 import prisma from "@/app/lib/prisma";
 
-export async function friendState(myID: string, id: string) {
+/**
+ * Récupère l'état de la relation (demande d'ami) entre deux utilisateurs
+ */
+export async function friendState(myID: string, targetID: string) {
+    if (!myID || !targetID) return null;
+
     try {
         const state = await prisma.friendRequest.findFirst({
             where: {
                 OR: [
-                    { receiverId: id, senderId: myID },
-                    { receiverId: myID, senderId: id },
+
+                    { receiverId: targetID, senderId: myID },
+                    { receiverId: myID, senderId: targetID },
+
                 ],
             },
             select: {
                 status: true,
             },
         });
-        if (!state) throw new Error("impossibele de recupperer");
-        revalidatePath("/all_member");
+
+
+        // Si aucune demande n'est trouvée, on vérifie si ils sont déjà amis
+        if (!state) {
+            const friendship = await prisma.friend.findFirst({
+                where: {
+                    OR: [
+                        { user1Id: myID, user2Id: targetID },
+                        { user1Id: targetID, user2Id: myID },
+                    ],
+                },
+            });
+
+            if (friendship) return "ACCEPTED";
+            return null;
+        }
+
         return state.status;
     } catch (error) {
-        console.error(error);
+        console.error("Erreur friendState:", error);
+        return null;
+
     }
 }
