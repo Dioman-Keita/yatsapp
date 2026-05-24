@@ -26,7 +26,7 @@ export default async function RootLayout({
     return (
         <html lang="en" className="scroll-smooth">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}>
-                <SideBar>{children}</SideBar>
+                {children}
             </body>
         </html>
     );

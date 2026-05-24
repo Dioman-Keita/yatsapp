@@ -12,3 +12,138 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sentMessages     Message[] @relation("sentMessages")
+  receivedMessages Message[] @relation("receivedMessages")
+
+  sessions Session[]
+  accounts Account[]
+
+  // Relations d'amitié
+  friends1 Friend[] @relation("friend1")
+  friends2 Friend[] @relation("friend2")
+
+  // Requêtes d'amis
+  sentFriendRequests     FriendRequest[] @relation("sentRequests")
+  receivedFriendRequests FriendRequest[] @relation("receivedRequests")
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model FriendRequest {
+  id         String              @id @default(cuid())
+  senderId   String
+  receiverId String
+  status     FriendRequestStatus @default(PENDING)
+
+  sender   User @relation("sentRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("receivedRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([senderId, receiverId])
+  @@index([senderId])
+  @@index([receiverId])
+  @@map("friend_request")
+}
+
+model Friend {
+  id      String @id @default(cuid())
+  user1Id String
+  user2Id String
+
+  user1 User @relation("friend1", fields: [user1Id], references: [id], onDelete: Cascade)
+  user2 User @relation("friend2", fields: [user2Id], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([user1Id, user2Id])
+  @@index([user1Id])
+  @@index([user2Id])
+  @@map("friend")
+}
+
+model Message {
+  id      String @id @default(cuid())
+  content String
+
+  senderId   String
+  receiverId String
+
+  isRead Boolean   @default(false)
+  readAt DateTime?
+
+  sender   User @relation("sentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("receivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@map("message")
+}

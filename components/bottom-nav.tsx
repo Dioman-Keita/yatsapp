@@ -5,9 +5,10 @@ import { RiGroupLine } from "react-icons/ri";
 import { PhoneCall, User2Icon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AvatarWithBadge } from "@/app/chat/components/avatarWithBadge";
+import { AvatarWithBadge } from "@/app/(main)/chat/components/avatarWithBadge";
 import { profileNameAb } from "@/functions/string_function";
 import { cn } from "@/lib/utils";
+import { useSession } from "@/app/lib/auth_client";
 
 interface userType {
     id: string;
@@ -19,7 +20,9 @@ interface userType {
     image?: string | null | undefined;
 }
 
-export function BottomNav({ user }: { user?: userType | null }) {
+export function BottomNav({ user: initialUser }: { user?: userType | null }) {
+    const { data: session } = useSession();
+    const user = initialUser || session?.user;
     const pathname = usePathname();
 
     const navItems = [
