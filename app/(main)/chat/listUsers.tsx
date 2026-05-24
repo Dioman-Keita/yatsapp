@@ -17,7 +17,7 @@ export default function ListUsers({ user }: { user: userInterface[] }) {
             <div className="flex-1 overflow-y-auto noScrollBar py-2">
                 {user.length > 0 ? (
                     user.map(data => (
-                        <Link href={"/chat/chatbox"} key={data.id} className="px-2">
+                        <Link href={`/chat/chatbox?id=${data.id}`} key={data.id} className="px-2">
                             <UserIcon
                                 image={data.image as string}
                                 name={data.name}

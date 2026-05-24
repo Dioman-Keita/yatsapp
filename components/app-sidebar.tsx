@@ -55,21 +55,10 @@ export function AppSidebar({ user: initialUser, ...props }: AppSidebarProps) {
                         <MdChat size={24} className="shrink-0" />
                         <span className="group-data-[collapsible=icon]:hidden font-medium">Messages</span>
                     </SideBarIcon>
-                    <SideBarIcon routeName="stories">
-                        <MdOutlineVideoCameraBack size={24} className="shrink-0" />
-                        <span className="group-data-[collapsible=icon]:hidden font-medium">Stories</span>
-                    </SideBarIcon>
+
                     <SideBarIcon routeName="all_member">
                         <UsersIcon size={24} className="shrink-0" />
                         <span className="group-data-[collapsible=icon]:hidden font-medium">Membres</span>
-                    </SideBarIcon>
-                    <SideBarIcon routeName="groupe">
-                        <RiGroupLine size={24} className="shrink-0" />
-                        <span className="group-data-[collapsible=icon]:hidden font-medium">Groupes</span>
-                    </SideBarIcon>
-                    <SideBarIcon routeName="call">
-                        <PhoneCall size={24} className="shrink-0" />
-                        <span className="group-data-[collapsible=icon]:hidden font-medium">Appels</span>
                     </SideBarIcon>
                 </div>
 
