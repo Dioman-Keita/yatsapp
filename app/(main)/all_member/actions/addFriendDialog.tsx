@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { addFriendAction } from "../actions/addFriendAction";
-import { friendState } from "../actions/friendSate";
 import { useEffect, useState } from "react";
 import { cencelFriend } from "../actions/cancekFirend";
 import { useRouter } from "next/navigation";
+import { friendState } from "../components/friendSate";
 
 export function AddFriendDialog({
     id,

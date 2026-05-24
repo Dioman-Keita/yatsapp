@@ -6,8 +6,8 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { userInterface } from "@/interface_and_type/user";
 import { useState, useMemo } from "react";
-import { AddFriendDialog } from "./addFriendDialog";
 import { NotificationDialog } from "./notificationDialog";
+import { AddFriendDialog } from "../actions/addFriendDialog";
 
 export default function ListAllUsers({ users, myID }: { users: userInterface[]; myID: string }) {
     const [search, setSearch] = useState<string>("");
@@ -21,7 +21,7 @@ export default function ListAllUsers({ users, myID }: { users: userInterface[]; 
             <div className="p-4 border-b">
                 <div className="flex items-center justify-between mb-4">
                     <h1 className="text-xl font-bold">Liste de tes amis</h1>
-                    <NotificationDialog />
+                    <NotificationDialog userID={myID} />
                 </div>
                 <div className="relative flex items-center gap-2">
                     <div className="relative flex-1">
