@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SideBar from "./sidbar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -26,7 +27,9 @@ export default async function RootLayout({
     return (
         <html lang="en" className="scroll-smooth">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}>
-                {children}
+                <TooltipProvider>
+                    {children}
+                </TooltipProvider>
             </body>
         </html>
     );

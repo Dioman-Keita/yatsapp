@@ -1,6 +1,8 @@
-import PusherClient from 'pusher-js';
+"use client";
 
-export const pusherClient = new PusherClient(
+import Pusher from 'pusher-js';
+
+export const pusherClient = new Pusher(
   process.env.NEXT_PUBLIC_PUSHER_KEY!,
   {
     cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,

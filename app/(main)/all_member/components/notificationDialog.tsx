@@ -28,7 +28,7 @@ export interface notif {
         name: string;
         image: string | null;
     };
-    receiver: {
+    receiver?: {
         id: string;
         name: string;
         image: string | null;
