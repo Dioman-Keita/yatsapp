@@ -32,7 +32,7 @@ export function AddFriendDialog({
     const router = useRouter();
     useEffect(() => {
         async function fetchState() {
-            const data = await friendState(myID, id);
+            const data = await friendStateww(myID, id);
             if (data) {
                 setState(data);
                 router.refresh();
