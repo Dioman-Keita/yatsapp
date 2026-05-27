@@ -2,6 +2,7 @@
 
 import { PusherServer } from "@/app/lib/pusher";
 import prisma from "@/app/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export async function sendMessageAction(senderId: string, receiverId: string, content: string) {
     if (!content.trim()) return { error: "Message vide" };
@@ -24,6 +25,7 @@ export async function sendMessageAction(senderId: string, receiverId: string, co
             PusherServer.trigger(`chat-${senderId}`, "new-message", message)
         ]);
         
+        revalidatePath("/chat");
         return { success: true, message };
     } catch (error) {
         console.error("Error in sendMessageAction:", error);

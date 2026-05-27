@@ -29,28 +29,48 @@ export function AddFriendDialog({
     myID: string;
 }) {
     const [state, setState] = useState<"PENDING" | "ACCEPTED" | "REJECTED" | string>("");
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
-    useEffect(() => {
-        async function fetchState() {
-            const data = await friendState(myID, id);
-            if (data) {
-                setState(data);
-                router.refresh();
-            }
-        }
 
+    const fetchState = async () => {
+        const data = await friendState(myID, id);
+        if (data) {
+            setState(data);
+        } else {
+            setState("");
+        }
+    };
+
+    useEffect(() => {
         fetchState();
     }, [myID, id]);
+
+    const handleAction = async (action: Function) => {
+        setIsLoading(true);
+        try {
+            const result = await action(myID, id);
+            if (result.success) {
+                // On rafraîchit les données serveur
+                router.refresh();
+                // On ré-interroge l'état local
+                await fetchState();
+            }
+        } catch (error) {
+            console.error("Action failed:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <Dialog>
             <DialogTrigger asChild>
                 {state === "PENDING" ? (
-                    <Button variant="outline">wait</Button>
+                    <Button variant="outline" disabled={isLoading}>Attente</Button>
                 ) : state === "ACCEPTED" ? (
-                    <Button variant="outline">DEL</Button>
+                    <Button variant="outline" disabled={isLoading}>Amis</Button>
                 ) : (
-                    <Button variant="outline">ADD</Button>
+                    <Button variant="outline" disabled={isLoading}>Ajouter</Button>
                 )}
             </DialogTrigger>
             <DialogContent>
@@ -58,30 +78,36 @@ export function AddFriendDialog({
                     <DialogTitle>{name}</DialogTitle>
                     <DialogDescription>{email}</DialogDescription>
                 </DialogHeader>
-                <div className="no-scrollbar -mx-4 max-h-[50vh] overflow-y-auto px-4 flex">
+                <div className="no-scrollbar -mx-4 max-h-[50vh] overflow-y-auto px-4 flex items-center gap-4">
                     <Avatar className="h-28 w-28">
                         <AvatarImage src={`${image}`} />
                         <AvatarFallback>IS</AvatarFallback>
                     </Avatar>
-                    {state === "PENDING" ? (
-                        <Button
-                            className="ml-auto my-auto transition-all duration-150 ease-in-out hover:scale-105 active:scale-95 "
-                            onClick={() => cencelFriend(myID, id)}>
-                            CANCEL{" "}
-                        </Button>
-                    ) : state === "ACCEPTED" ? (
-                        <Button
-                            className="ml-auto my-auto transition-all duration-150 ease-in-out hover:scale-105 active:scale-95 "
-                            onClick={() => addFriendAction(myID, id)}>
-                            DEL{" "}
-                        </Button>
-                    ) : (
-                        <Button
-                            className="ml-auto my-auto transition-all duration-150 ease-in-out hover:scale-105 active:scale-95 "
-                            onClick={() => addFriendAction(myID, id)}>
-                            add{" "}
-                        </Button>
-                    )}
+                    
+                    <div className="ml-auto">
+                        {state === "PENDING" ? (
+                            <Button
+                                disabled={isLoading}
+                                className="transition-all duration-150 ease-in-out hover:scale-105 active:scale-95"
+                                onClick={() => handleAction(cencelFriend)}>
+                                {isLoading ? "..." : "ANNULER"}
+                            </Button>
+                        ) : state === "ACCEPTED" ? (
+                            <Button
+                                disabled={isLoading}
+                                className="transition-all duration-150 ease-in-out hover:scale-105 active:scale-95"
+                                onClick={() => handleAction(cencelFriend)}>
+                                {isLoading ? "..." : "SUPPRIMER"}
+                            </Button>
+                        ) : (
+                            <Button
+                                disabled={isLoading}
+                                className="transition-all duration-150 ease-in-out hover:scale-105 active:scale-95"
+                                onClick={() => handleAction(addFriendAction)}>
+                                {isLoading ? "..." : "AJOUTER"}
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </DialogContent>
         </Dialog>
