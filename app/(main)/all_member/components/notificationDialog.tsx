@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import GetNotification from "../actions/getNotification";
 import { useEffect, useState } from "react";
 import { reject, valider } from "../actions/actionFriend";
+import { useRouter } from "next/navigation";
 
 type FriendRequestStatus = "PENDING" | "ACCEPTED" | "REJECTED";
 
@@ -37,19 +38,37 @@ export interface notif {
 
 export function NotificationDialog({ userID }: { userID: string }) {
     const [notifications, setNotifications] = useState<notif[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+
+    const fetchNotifications = async () => {
+        try {
+            const result = await GetNotification(userID);
+            if (!result) throw new Error("nous avons pas pu recuperer les notifs");
+            setNotifications(result);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
-        const fetchNotifications = async () => {
-            try {
-                const result = await GetNotification(userID);
-                if (!result) throw new Error("nous avons pas pu recuperer les notifs");
-                setNotifications(result);
-            } catch (error) {
-                console.error(error);
-            }
-        };
         fetchNotifications();
     }, [userID]);
+
+    const handleAction = async (action: Function, ...args: any[]) => {
+        setIsLoading(true);
+        try {
+            await action(...args);
+            // On rafraîchit les données serveur
+            router.refresh();
+            // On ré-interroge l'état local
+            await fetchNotifications();
+        } catch (error) {
+            console.error("Action failed:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <Dialog>
@@ -89,10 +108,17 @@ export function NotificationDialog({ userID }: { userID: string }) {
                                     {new Date(ntf.createdAt).toLocaleDateString()}
                                 </p>
                                 <div className="flex gap-3">
-                                    <Button onClick={() => reject(ntf.id)} variant={"destructive"}>
+                                    <Button 
+                                        onClick={() => handleAction(reject, ntf.id)} 
+                                        variant={"destructive"}
+                                        disabled={isLoading}>
                                         reject
                                     </Button>
-                                    <Button onClick={() => valider(ntf.id, ntf.receiverId, ntf.senderId)}>add</Button>
+                                    <Button 
+                                        onClick={() => handleAction(valider, ntf.id, ntf.receiverId, ntf.senderId)}
+                                        disabled={isLoading}>
+                                        add
+                                    </Button>
                                 </div>
                             </div>
                             <div className="h-2 w-2 rounded-full bg-primary shrink-0"></div>
