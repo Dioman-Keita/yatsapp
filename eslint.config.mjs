@@ -1,18 +1,16 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import { defineConfig, globalIgnores } from "eslint/config"
+import { tanstackConfig } from "@tanstack/eslint-config"
 
 const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
+  ...tanstackConfig,
   globalIgnores([
-    // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",
     "build/**",
+    "dist/**",
+    "convex/_generated/**",
     "next-env.d.ts",
   ]),
-]);
+])
 
-export default eslintConfig;
+export default eslintConfig

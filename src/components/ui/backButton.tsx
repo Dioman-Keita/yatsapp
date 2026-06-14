@@ -1,14 +1,27 @@
-"use client";
-import { ChevronLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+"use client"
+
+import { useCanGoBack, useRouter } from "@tanstack/react-router"
+import { ChevronLeft } from "lucide-react"
 
 export default function BackButton() {
-    const router = useRouter();
-    return (
-        <div className="md:hidden">
-            <button onClick={() => router.back()}>
-                <ChevronLeft />
-            </button>
-        </div>
-    );
+  const router = useRouter()
+  const canGoBack = useCanGoBack()
+
+  return (
+    <div className="md:hidden">
+      <button
+        type="button"
+        onClick={() => {
+          if (canGoBack) {
+            router.history.back()
+            return
+          }
+
+          router.navigate({ to: "/" })
+        }}
+      >
+        <ChevronLeft />
+      </button>
+    </div>
+  )
 }

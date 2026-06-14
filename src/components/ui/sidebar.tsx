@@ -2,11 +2,12 @@
 
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
+import {  cva } from "class-variance-authority";
 import { PanelLeftIcon } from "lucide-react";
+import type {VariantProps} from "class-variance-authority";
 
 import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/cn";
+import { cn } from "@/shared/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -79,7 +80,7 @@ function SidebarProvider({
 
     // Helper to toggle the sidebar.
     const toggleSidebar = React.useCallback(() => {
-        return isMobile ? setOpenMobile(open => !open) : setOpen(open => !open);
+        return isMobile ? setOpenMobile((value) => !value) : setOpen((value) => !value);
     }, [isMobile, setOpen, setOpenMobile]);
 
     // Adds a keyboard shortcut to toggle the sidebar.

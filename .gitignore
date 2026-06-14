@@ -19,6 +19,7 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
@@ -45,3 +46,11 @@ next-env.d.ts
 
 #devtools
 .idea/
+
+#temp
+.temp
+
+#generated
+generated/
+_generated/
+routeTree.gen.ts
